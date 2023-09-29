@@ -9,7 +9,9 @@ def fetch_poverty_data():
     url = f"{WB_API_BASE_URL}/indicator/SI.POV.DDAY?format=json"
     response = requests.get(url)
     if response.status_code == 200:
-        data = response.json()[1]
+        data = response.json()
+        # Extract data from the response
+        data = data[1]  # The actual data is in the second element of the response
         return data
     else:
         st.error("Failed to fetch poverty data.")
@@ -25,7 +27,7 @@ def main():
         # Create a dictionary to store country data
         country_data = {}
         for entry in data:
-            country_code = entry['countryiso3code']
+            country_code = entry['country']['id']
             poverty_value = entry['value']
             country_data[country_code] = poverty_value
 
