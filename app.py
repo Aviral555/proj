@@ -39,8 +39,9 @@ def main():
 
     # Scatter plot for Population vs. GDP
     st.subheader("Scatter Plot: Population vs. GDP")
+    fig, ax = plt.subplots()
     sns.scatterplot(data=df, x='Population (millions)', y='GDP (trillion USD)')
-    st.pyplot()
+    st.pyplot(fig)
 
 if __name__ == "__main__":
     main()
