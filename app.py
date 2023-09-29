@@ -1,38 +1,35 @@
 import streamlit as st
 import requests
+import pandas as pd
 
-# World Bank API Base URL
-WB_API_BASE_URL = "https://api.worldbank.org/v2"
-
-# Function to fetch poverty data from the World Bank API
-def fetch_poverty_data():
-    url = f"{WB_API_BASE_URL}/indicator/SI.POV.DDAY?format=json"
+# Function to fetch COVID-19 data from the disease.sh API
+def fetch_covid_data():
+    url = "https://disease.sh/v3/covid-19/countries"
     response = requests.get(url)
     if response.status_code == 200:
         data = response.json()
-        # Extract data from the response
-        data = data[1]  # The actual data is in the second element of the response
         return data
     else:
-        st.error("Failed to fetch poverty data.")
+        st.error("Failed to fetch COVID-19 data.")
         return None
 
 def main():
-    st.title("World Poverty Comparison")
+    st.title("COVID-19 Data Comparison")
 
-    # Fetch poverty data from the World Bank API
-    data = fetch_poverty_data()
+    # Fetch COVID-19 data from the disease.sh API
+    data = fetch_covid_data()
 
     if data is not None:
-        # Create a dictionary to store country data
-        country_data = {}
-        for entry in data:
-            country_code = entry['country']['id']
-            poverty_value = entry['value']
-            country_data[country_code] = poverty_value
+        # Create a DataFrame from the data
+        df = pd.DataFrame(data)
 
-        # Display a map with poverty levels
-        st.map(country_data)
+        # Select relevant columns
+        columns = ['country', 'cases', 'deaths', 'recovered']
+        df = df[columns]
+
+        # Display the data table
+        st.subheader("COVID-19 Data by Country")
+        st.write(df)
 
 if __name__ == "__main__":
     main()
