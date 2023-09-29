@@ -1,35 +1,24 @@
 import streamlit as st
-import requests
 import pandas as pd
 
-# Function to fetch COVID-19 data from the disease.sh API
-def fetch_covid_data():
-    url = "https://disease.sh/v3/covid-19/countries"
-    response = requests.get(url)
-    if response.status_code == 200:
-        data = response.json()
-        return data
-    else:
-        st.error("Failed to fetch COVID-19 data.")
-        return None
+# Create a dummy dataset
+dummy_data = {
+    'Country': ['USA', 'Canada', 'UK', 'Germany', 'France'],
+    'Population (millions)': [331, 38, 67, 83, 67],
+    'GDP (trillion USD)': [21.43, 1.64, 2.83, 4.21, 2.72],
+    'Poverty Rate (%)': [12.3, 8.7, 10.9, 6.2, 9.8]
+}
 
+# Create a Streamlit app
 def main():
-    st.title("COVID-19 Data Comparison")
+    st.title("Country Data Comparison")
 
-    # Fetch COVID-19 data from the disease.sh API
-    data = fetch_covid_data()
+    # Create a DataFrame from the dummy data
+    df = pd.DataFrame(dummy_data)
 
-    if data is not None:
-        # Create a DataFrame from the data
-        df = pd.DataFrame(data)
-
-        # Select relevant columns
-        columns = ['country', 'cases', 'deaths', 'recovered']
-        df = df[columns]
-
-        # Display the data table
-        st.subheader("COVID-19 Data by Country")
-        st.write(df)
+    # Display the data table
+    st.subheader("Dummy Country Data")
+    st.write(df)
 
 if __name__ == "__main__":
     main()
